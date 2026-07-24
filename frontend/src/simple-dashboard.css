@@ -1,0 +1,49 @@
+/* A plain, familiar dashboard treatment matching the supplied reference. */
+:root { font-family: Arial, Helvetica, sans-serif; color: #102A43; }
+.sidebar { width: 230px; flex-basis: 230px; padding: 18px 0; background: #102A43; }
+.sidebar nav { gap: 3px; margin-top: 4px; }
+.side-link { padding: 15px 20px; border-radius: 0; font-size: 16px; font-weight: 400; }
+.sidebar-user { padding: 18px 20px 0; }
+.sidebar-user button { font-size: 14px; color: #DBEAFE; }
+.main-content { padding: 0 36px 36px; }
+.page-head { margin-bottom: 24px; }
+.page-head h1 { font-family: Arial, Helvetica, sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 0; margin: 0 0 7px; }
+.eyebrow { display: none; }
+.button { font-size: 16px; font-weight: 500; box-shadow: none; }
+.panel { border: 0; box-shadow: 0 3px 12px rgba(16, 42, 67, .08); padding: 20px; }
+.panel h2 { font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: 700; margin: 4px 0 10px; }
+.panel p { font-size: 15px; }
+.panel select, .filters select, .monitor-select select { font-size: 16px; padding: 10px 12px; }
+.patients-layout { grid-template-columns: 300px 1fr; gap: 20px; }
+.form-panel label, .record-panel label, .filters label, .monitor-select label { font-size: 15px; font-weight: 400; margin-bottom: 13px; }
+.form-panel input, .form-panel select, .record-panel input, .record-panel select, .search { font-size: 16px; padding: 11px; }
+.patient-row b { font-size: 16px; }
+.patient-row small, .patient-row em { font-size: 14px; }
+@media (max-width: 900px) { .sidebar { width: 100%; padding: 12px; } .side-link { padding: 9px 12px; } .main-content { padding: 25px 20px; } }
+@media (max-width: 560px) { .main-content { padding: 22px 14px; } .patients-layout { grid-template-columns: 1fr; } }
+
+.plain-title { font-size: 28px; margin: 0 0 24px; }
+.two { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; }
+.patient-form, .patient-list-panel { min-height: 560px; }
+.patient-form h2, .patient-list-panel h2 { margin-top: 4px; }
+.patient-form input, .patient-form select { display: block; width: 100%; margin: 12px 0; border: 1px solid #CBD5E1; border-radius: 8px; padding: 11px; font-size: 16px; background: #fff; }
+.patient-form .button { width: 100%; margin-top: 2px; }
+.patient-form .form-error { display: block; margin: 8px 0 12px; color: #C62828; line-height: 1.35; }
+.patient-list-panel .search { margin: 10px 0 16px; }
+.patient { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #E8EEF6; font-size: 16px; }
+.patient span, .muted { color: #667085; font-size: 15px; }
+.detail-heading { margin-bottom: 20px; }
+.detail-heading .plain-title { margin: 12px 0 5px; }
+.detail-heading p { color: #667085; margin: 0; }
+.detail-form { max-width: 820px; }
+.detail-form label { display: grid; gap: 7px; font-size: 15px; color: #40516A; }
+.detail-form input, .detail-form select { width: 100%; padding: 11px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 16px; }
+.system-settings .setting-card { min-height: 170px; }
+.setting-card small { display: block; color: #667085; font-size: 13px; line-height: 1.5; margin-top: 12px; }
+.setting-card code { font-size: 12px; word-break: break-word; }
+.status-good { color: #168B46 !important; font-weight: 700; }
+.status-bad { color: #C62828 !important; font-weight: 700; }
+.setup-panel { max-width: 900px; margin-top: 20px; }
+.setup-panel ol { margin: 14px 0; padding-left: 22px; }
+.setup-panel li { color: #40516A; font-size: 15px; line-height: 1.55; margin: 9px 0; }
+@media (max-width: 700px) { .two { grid-template-columns: 1fr; } .patient-form, .patient-list-panel { min-height: auto; } }
