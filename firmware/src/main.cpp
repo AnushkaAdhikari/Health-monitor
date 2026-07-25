@@ -39,14 +39,22 @@ int32_t  heartRate;
 int8_t   validHeartRate;
 
 // ─── WiFi ────────────────────────────────────────────────────────────────────
-void connectWiFi() {
+bool connectWiFi() {
     Serial.print("Connecting to WiFi");
     WiFi.begin(WIFI_SSID, WIFI_PASS);
-    while (WiFi.status() != WL_CONNECTED) {
+    unsigned long startedAt = millis();
+    const unsigned long timeoutMs = 20000;
+    while (WiFi.status() != WL_CONNECTED && millis() - startedAt < timeoutMs) {
         delay(500);
         Serial.print(".");
     }
-    Serial.println("\nWiFi connected: " + WiFi.localIP().toString());
+    if (WiFi.status() == WL_CONNECTED) {
+        Serial.println("\nWiFi connected: " + WiFi.localIP().toString());
+        return true;
+    }
+    Serial.println("\nWiFi connection failed. Check WIFI_SSID, WIFI_PASS, and use a 2.4 GHz network.");
+    WiFi.disconnect();
+    return false;
 }
 
 // ─── Validation ──────────────────────────────────────────────────────────────
@@ -117,7 +125,9 @@ void setup() {
     tempSensor.begin();
     tempSensor.setWaitForConversion(false);
 
-    connectWiFi();
+    if (!connectWiFi()) {
+        Serial.println("WiFi will be retried when the next reading is ready.");
+    }
     Serial.println("Setup complete. Place finger FLAT on sensor.");
 }
 
