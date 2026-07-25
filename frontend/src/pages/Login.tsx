@@ -6,6 +6,7 @@ import { useAuthStore } from "../store/auth";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError]       = useState("");
   const [loading, setLoading]   = useState(false);
   const login    = useAuthStore((s) => s.login);
@@ -53,13 +54,7 @@ export default function Login() {
             autoFocus
           />
           <label style={styles.label}>Password</label>
-          <input
-            style={styles.input}
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div style={styles.passwordWrap}><input style={{ ...styles.input, marginBottom: 0, paddingRight: "3.2rem" }} type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.eye}>{showPassword ? "Hide" : "Show"}</button></div>
           <button style={styles.button} type="submit" disabled={loading}>
             {loading ? "Signing in..." : "Sign In"}
           </button>
@@ -81,6 +76,8 @@ const styles: Record<string, React.CSSProperties> = {
   subtitle: { textAlign: "center", color: "#667085", marginBottom: "1.5rem" },
   label:    { display: "block", marginBottom: 4, fontWeight: 600, fontSize: "0.9rem" },
   input:    { width: "100%", padding: "0.6rem 0.8rem", borderRadius: 8, border: "1px solid #CBD5E1", marginBottom: "1rem", fontSize: "1rem", boxSizing: "border-box" },
+  passwordWrap: { position: "relative", marginBottom: "1rem" },
+  eye: { position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", border: 0, background: "transparent", color: "#1976D2", fontSize: "0.8rem", fontWeight: 600, padding: 5 },
   button:   { width: "100%", padding: "0.75rem", background: "#1976D2", color: "#fff", border: "none", borderRadius: 8, fontSize: "1rem", fontWeight: 600, cursor: "pointer" },
   error:    { background: "#fef2f2", color: "#dc2626", padding: "0.75rem", borderRadius: 8, marginBottom: "1rem", fontSize: "0.9rem" },
   success:  { background: "#f0fdf4", color: "#16a34a", padding: "0.75rem", borderRadius: 8, marginBottom: "1rem", fontSize: "0.9rem", fontWeight: 600 },
