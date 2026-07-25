@@ -7,6 +7,8 @@ export default function Register() {
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
   const [confirm,  setConfirm]  = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error,    setError]    = useState("");
   const [loading,  setLoading]  = useState(false);
   const navigate = useNavigate();
@@ -17,6 +19,10 @@ export default function Register() {
 
     if (password !== confirm) {
       setError("Passwords do not match.");
+      return;
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(password)) {
+      setError("Password needs 8+ characters with uppercase, lowercase, a number, and a special character.");
       return;
     }
 
@@ -53,16 +59,11 @@ export default function Register() {
           />
 
           <label style={styles.label}>Password</label>
-          <input
-            style={styles.input} type="password" value={password}
-            onChange={(e) => setPassword(e.target.value)} required minLength={6}
-          />
+          <div style={styles.passwordWrap}><input style={{ ...styles.input, marginBottom: 0, paddingRight: "3.2rem" }} type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}/><button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.eye}>{showPassword ? "Hide" : "Show"}</button></div>
+          <p style={styles.hint}>Use 8+ characters with uppercase, lowercase, a number, and a special character.</p>
 
           <label style={styles.label}>Confirm Password</label>
-          <input
-            style={styles.input} type="password" value={confirm}
-            onChange={(e) => setConfirm(e.target.value)} required minLength={6}
-          />
+          <div style={styles.passwordWrap}><input style={{ ...styles.input, marginBottom: 0, paddingRight: "3.2rem" }} type={showConfirm ? "text" : "password"} value={confirm} onChange={(e) => setConfirm(e.target.value)} required minLength={8}/><button type="button" onClick={() => setShowConfirm(!showConfirm)} style={styles.eye}>{showConfirm ? "Hide" : "Show"}</button></div>
 
           <button style={styles.button} type="submit" disabled={loading}>
             {loading ? "Creating account..." : "Register"}
@@ -85,6 +86,9 @@ const styles: Record<string, React.CSSProperties> = {
   subtitle: { textAlign: "center", color: "#667085", marginBottom: "1.5rem" },
   label:    { display: "block", marginBottom: 4, fontWeight: 600, fontSize: "0.9rem" },
   input:    { width: "100%", padding: "0.6rem 0.8rem", borderRadius: 8, border: "1px solid #CBD5E1", marginBottom: "1rem", fontSize: "1rem", boxSizing: "border-box" },
+  passwordWrap: { position: "relative", marginBottom: "0.45rem" },
+  eye: { position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", border: 0, background: "transparent", color: "#1976D2", fontSize: "0.8rem", fontWeight: 600, padding: 5 },
+  hint: { margin: "0 0 1rem", color: "#667085", fontSize: "0.75rem", lineHeight: 1.35 },
   button:   { width: "100%", padding: "0.75rem", background: "#1976D2", color: "#fff", border: "none", borderRadius: 8, fontSize: "1rem", fontWeight: 600, cursor: "pointer", marginBottom: "1rem" },
   error:    { background: "#fef2f2", color: "#dc2626", padding: "0.75rem", borderRadius: 8, marginBottom: "1rem", fontSize: "0.9rem" },
   footer:   { textAlign: "center", color: "#6b7280", fontSize: "0.9rem", margin: 0 },
