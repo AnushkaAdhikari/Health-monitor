@@ -6,5 +6,6 @@ const links = [["/", "Dashboard"], ["/patients", "Patients"], ["/live", "Live mo
 export default function DashboardLayout() {
   const { username, logout } = useAuthStore();
   const navigate = useNavigate();
-  return <div className="app-shell"><aside className="sidebar"><nav>{links.map(([to, label]) => <NavLink key={to} to={to} end={to === "/"} className="side-link">{label}</NavLink>)}</nav><div className="sidebar-user"><span className="avatar">{username?.[0]?.toUpperCase() ?? "U"}</span><span><b>{username ?? "User"}</b><button onClick={() => { logout(); navigate("/login"); }}>Logout</button></span></div></aside><main className="main-content"><Outlet /></main></div>;
+  const signOut = () => { if (window.confirm("Are you sure you want to log out?")) { logout(); navigate("/login"); } };
+  return <div className="app-shell"><aside className="sidebar"><div className="portal-brand"><span>+</span><b>VitalCare<small>CLINICAL PORTAL</small></b></div><nav>{links.map(([to, label]) => <NavLink key={to} to={to} end={to === "/"} className="side-link">{label}</NavLink>)}</nav><div className="sidebar-user"><span className="avatar">{username?.[0]?.toUpperCase() ?? "U"}</span><span><b>{username ?? "Doctor"}</b><button onClick={signOut}>Logout</button></span></div></aside><main className="main-content"><Outlet /></main></div>;
 }
