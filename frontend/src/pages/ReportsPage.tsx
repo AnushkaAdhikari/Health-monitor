@@ -1,1 +1,9 @@
-export { Reports as default } from "./Pages";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import api from "../api/axios";
+import type { Vital } from "../components/VitalTrendChart";
+import { ReadingTable } from "./HistoryPage";
+type Patient = { id: number; name: string };
+const average = (readings: Vital[], key: "heart_rate" | "spo2" | "temperature") => readings.length ? (readings.reduce((sum, reading) => sum + reading[key], 0) / readings.length).toFixed(1) : "—";
+export default function ReportsPage() { const [selected, setSelected] = useState<number>(); const { data: patients = [] } = useQuery({ queryKey: ["patients"], queryFn: () => api.get("/api/patients/").then(r => r.data as Patient[]) }); const id = selected ?? patients[0]?.id; const { data: readings = [] } = useQuery({ queryKey: ["report-history", id], enabled: !!id, queryFn: () => api.get(`/api/vitals/${id}?limit=100`).then(r => r.data as Vital[]) }); return <><header className="page-head"><div><h1>Reports</h1><p>Summary and complete record of patient measurements.</p></div></header><div className="dashboard-picker"><label>Patient <select value={id ?? ""} onChange={e => setSelected(Number(e.target.value))}>{patients.map(p => <option key={p.id} value={p.id}>ID #{p.id} · {p.name}</option>)}</select></label></div><section className="report-grid"><Stat label="Average heart rate" value={average(readings, "heart_rate")} unit="bpm"/><Stat label="Average oxygen" value={average(readings, "spo2")} unit="%"/><Stat label="Average temperature" value={average(readings, "temperature")} unit="°C"/><Stat label="Total readings" value={readings.length} unit="records"/></section><ReadingTable readings={readings}/></> }
+function Stat({ label, value, unit }: { label: string; value: string | number; unit: string }) { return <article className="stat-card"><p>{label}</p><strong>{value}</strong><small>{unit}</small></article>; }
