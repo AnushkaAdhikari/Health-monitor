@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app.db.database import get_db
 from app.models.vitals import Vital
@@ -44,9 +44,11 @@ def get_alerts(patient_id: int, db: Session = Depends(get_db), _=Depends(get_cur
         .first()
     )
     if not record:
-        return {"alerts": []}
+        return {"alerts": [], "device_status": "disconnected", "message": "No readings have been received from this patient's monitor."}
+    if datetime.utcnow() - record.recorded_at > timedelta(seconds=20):
+        return {"alerts": [], "device_status": "disconnected", "checked_at": record.recorded_at, "message": "The monitor has not sent a recent reading."}
     alerts = check_alerts(record.heart_rate, record.spo2, record.temperature)
-    return {"alerts": alerts, "checked_at": record.recorded_at}
+    return {"alerts": alerts, "device_status": "connected", "checked_at": record.recorded_at}
 
 
 @router.get("/{patient_id}", response_model=List[VitalResponse])
