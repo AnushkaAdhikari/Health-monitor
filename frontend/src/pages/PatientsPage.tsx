@@ -40,7 +40,7 @@ export default function PatientsPage() {
     <input required placeholder="Medical history" value={form.medical_history} onChange={e => setValue("medical_history", e.target.value)} />
     {error && <small className="form-error">{error}</small>}<button className="button" disabled={saving}>{saving ? "Adding…" : "Add patient"}</button></form>
     <section className="panel patient-list-panel"><h2>Patient list</h2><input className="search" placeholder="Search by name" value={search} onChange={e => setSearch(e.target.value)} />
-      {filtered.map(p => <Link className="patient" key={p.id} to={`/patients/${p.id}`}>{p.name}<span>{p.age} years</span></Link>)}
+      {filtered.map(p => <Link className="patient" key={p.id} to={`/patients/${p.id}`}><span><b>ID #{p.id}</b> · {p.name}</span><span>{p.age} years</span></Link>)}
       {!filtered.length && <p className="muted">No matching patients.</p>}
     </section></section></>;
 }
