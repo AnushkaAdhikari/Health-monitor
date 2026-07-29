@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import { useAuthStore } from "../store/auth";
+import { useThemeStore } from "../store/theme";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const registered = params.get("registered") === "1";
+  const dark = useThemeStore((s) => s.theme) === "dark";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +27,9 @@ export default function Login() {
       const res = await api.post("/auth/login", form, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
-      login(res.data.access_token, email);
+      const me = await api.get("/auth/me", { headers: { Authorization: `Bearer ${res.data.access_token}` } });
+      login(res.data.access_token, me.data.username);
+      if (!localStorage.getItem("doctorProfile")) localStorage.setItem("doctorProfile", JSON.stringify({ name: me.data.username, email: me.data.email, department: "", avatar: "" }));
       navigate("/");
     } catch {
       setError("Invalid email or password.");
@@ -35,10 +39,9 @@ export default function Login() {
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Health Monitor</h1>
-        <p style={styles.subtitle}>Sign in to your account</p>
+    <div style={{ ...styles.page, background: dark ? "#111827" : "#F4F7FB" }}>
+      <div style={{ ...styles.card, background: dark ? "#1F2937" : "#fff", color: dark ? "#F9FAFB" : "#17223B" }}>
+        <div style={styles.brand}><span>+</span>VitalCare</div><p style={{ ...styles.subtitle, color: dark ? "#D1D5DB" : "#667085" }}>Sign in to your account</p>
 
         {registered && <div style={styles.success}>Account created! Please sign in.</div>}
         {error && <div style={styles.error}>{error}</div>}
@@ -73,6 +76,7 @@ const styles: Record<string, React.CSSProperties> = {
   page:     { display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#F4F7FB" },
   card:     { background: "#fff", borderRadius: 12, padding: "2.5rem", width: 360, boxShadow: "0 4px 24px rgba(0,0,0,0.1)" },
   title:    { margin: 0, fontSize: "1.6rem", color: "#17223B", textAlign: "center" },
+  brand: { color: "#1976D2", textAlign: "center", fontSize: "1.7rem", fontWeight: 700, marginBottom: 7 },
   subtitle: { textAlign: "center", color: "#667085", marginBottom: "1.5rem" },
   label:    { display: "block", marginBottom: 4, fontWeight: 600, fontSize: "0.9rem" },
   input:    { width: "100%", padding: "0.6rem 0.8rem", borderRadius: 8, border: "1px solid #CBD5E1", marginBottom: "1rem", fontSize: "1rem", boxSizing: "border-box" },
