@@ -14,7 +14,7 @@ const char* WIFI_SSID     = "iPhone";
 const char* WIFI_PASS     = "123456789";
 // Use this computer's IPv4 address and keep port 8000 for the FastAPI server.
 // Both the ESP32 and this computer must be connected to the same Wi-Fi network.
-const char* API_ENDPOINT  = "http://172.20.10.4:8000/api/vitals/";
+const char* API_ENDPOINT  = "http://172.20.10.3:8000/api/vitals/";
 const int   PATIENT_ID    = 3;
 
 // ─── Finger detection threshold ──────────────────────────────────────────────
